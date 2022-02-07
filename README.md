@@ -1,70 +1,94 @@
-# Getting Started with Create React App
+# WiproCareerHack-HackathonSubmission-Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Minimal Frontend Interface as per the problem statement given in Wipro CareerHack [India]: Java Spring Boot + AWS challenge hosted by TopCoder.
 
-## Available Scripts
+https://www.topcoder.com/challenges/53963822-9016-400f-b418-6893463e5fb3
 
-In the project directory, you can run:
+## Screens
+- Dashboard ```/```
+- Login ```/login```
+- Create User Screen ```/create-user```
+- Create Password Screen ```/activate```
 
-### `npm start`
+# Deployment
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+The project has been deployed on an Amazon EC2 t2.micro instance. (Separate from the Backend Instance)
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Setup EC2
 
-### `npm test`
+An Ubuntu EC2 instance has been set up, with inbound rules for SSH (Own IP) and HTTP traffic.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+![img.png](screenshots/ec2.png)
 
-### `npm run build`
+## Setting up SSH
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+SSH Config file has been edited for easy access.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+![img.png](screenshots/ssh-config.png)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Logging into the EC2 Instance using SSH
 
-### `npm run eject`
+![img.png](screenshots/ssh-login.png)
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Installing NPM and Node on the EC2
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```
+sudo apt update
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+sudo apt install nodejs
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## Fetching the React App source code from GitHub
 
-## Learn More
+```
+git pull https://github.com/devptyagi/WiproCareerHack-HackathonSubmission-Frontend.git
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Creating the Build Files
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```
+cd WiproCareerHack-HackathonSubmission-Frontend
 
-### Code Splitting
+npm i
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+npm run build
+```
 
-### Analyzing the Bundle Size
+## Installing NGINX
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+```
+sudo apt install nginx
 
-### Making a Progressive Web App
+sudo systemctl status nginx
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+![img.png](screenshots/nginx.png)
 
-### Advanced Configuration
+## Configuring NGINX Server
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+Copy the build files from 'build' folder to a new folder in
+/var/www/ directory.
 
-### Deployment
+```
+mkdir /var/www/wipro-frontend
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+cp -r build/* /var/www/wipro-frontend/
+```
 
-### `npm run build` fails to minify
+Edit the default NGINX Config file to serve the /var/www/wipro-frontend/ directory.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+```
+sudo nano /etc/nginx/sites-available/default
+```
+
+![img.png](screenshots/nginx-config.png)
+
+## Restart NGINX
+
+```
+sudo systemctl restart nginx
+```
+
+## Done!
+
+The front end has been deployed to the EC2 instance successfully!
