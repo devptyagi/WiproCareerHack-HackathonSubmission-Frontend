@@ -5,6 +5,7 @@ import '../Styles/Login.css'
 import axios from '../Util/axios';
 import { useHistory } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { toast } from 'react-toastify';
 
 export default function Login() {
 
@@ -28,16 +29,40 @@ export default function Login() {
     setIsLoggedIn(true);
   }
 
+  const notifyError = (message) => {
+    toast.error(message, {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      });
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const loginData = {
       emailAddress: e.target.formBasicEmail.value,
       password: e.target.formBasicPassword.value
     }
-    console.log(loginData);
-    const loginResponse = await axios.post('/auth/login', loginData);
-    const userData = await loginResponse.data;
-    saveUserDataInLocalStorage(userData);
+    try {
+      const loginResponse = await axios.post('/auth/login', loginData);
+      if(loginResponse.status === 200) {
+        const userData = await loginResponse.data;
+        saveUserDataInLocalStorage(userData);
+      }
+    } catch(err) {
+      if(err.response && err.response.status === 401) {
+        notifyError('Wrong Credentials!');
+      } else if(err.response && err.response.status === 400 && err.response.data) {
+          const fields = Object.keys(err.response.data);
+          fields.forEach((field, _) => {
+            notifyError(err.response.data[field]);
+          })
+      }
+    }
   }
 
   if(isLoggedIn) {
