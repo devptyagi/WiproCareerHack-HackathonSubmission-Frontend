@@ -1,0 +1,31 @@
+.dashboard__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 3rem;
+    padding-right: 3rem;
+    margin: 2rem 0;
+}
+
+.dashboardHeader__buttons > button{
+    margin-left: 2rem;
+}
+
+.dashboard__body {
+    padding-left: 3rem;
+    padding-right: 3rem;
+}
+
+.deleteBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.delete-icon {
+    color: red;
+}
+
+i:hover {
+    transform: scale(1.5);
+}

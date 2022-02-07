@@ -1,23 +1,24 @@
-import logo from './logo.svg';
 import './App.css';
+import Dashboard from './Screens/Dashboard';
+import Login from './Screens/Login';
+import CreateUser from './Screens/CreateUser';
+import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
+
+import { ToastContainer } from 'react-toastify';
+import CreatePassword from './Screens/CreatePassword';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <ToastContainer />
+      <Router>
+        <Switch>
+          <Route path="/" exact component={Dashboard}/>
+          <Route path="/login" exact component={Login}/>
+          <Route path="/create-user" exact component={CreateUser}/>
+          <Route path="/activate" exact component={CreatePassword}/>
+        </Switch>
+      </Router>
     </div>
   );
 }
